@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+
+    <!-- Disable PDB generation -->
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+
+    <!-- Disable deps.json generation -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+
+    <!-- Deploy the produced assembly -->
+    <PublishDir>..\bin\SampleModule</PublishDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0" PrivateAssets="All" />
+    <Content Include="..\SampleModule.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
