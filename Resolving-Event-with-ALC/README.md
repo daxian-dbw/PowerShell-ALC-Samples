@@ -31,7 +31,7 @@ and then use a custom `AssemblyLoadContext` in the handler to deal with the load
 With this, there is no need to have a warpper assembly,
 and the handler is guaranteed to return the same assembly instance for all the loading requests it receives for the same assembly.
 
-We have the module [`SampleModule`](./src/SampleModule/README.md) to demonstrate this solution.
+We have the module [`SampleModule`](./src/SampleModule/) to demonstrate this solution.
 The whole sample is organized as follows:
 
 - [shared-dependency](./src/shared-dependency/): it's a project to produce different versions of NuGet packages for `SharedDependency.dll`.
