@@ -4,7 +4,6 @@ The `SampleModule` has the following folder structure:
 ```
 └───SampleModule
     │   Greeting.Commands.dll
-    │   Greeting.Init.dll
     │   LocalDependency.dll
     │   SampleModule.psd1
     │
@@ -12,12 +11,12 @@ The `SampleModule` has the following folder structure:
             SharedDependency.dll
 ```
 
-`SampleModule.psd1` declares 2 nested modules: `NestedModules = @('Greeting.Init.dll', 'Greeting.Commands.dll')`.
+`SampleModule.psd1` declares a nested module: `NestedModules = @('Greeting.Commands.dll')`.
 
-`Greeting.Init.dll` contains no business logic of the module, but only a custom implementation of `AssemblyLoadContext` and the code that registers a handler to `AssemblyLoadContext.Default.Resolving` event when the module is loaded (of course, unregister when the module is removed).
+`Greeting.Commands.dll` references 2 dependencies: `SharedDependency.dll` and `LocalDependency.dll`. It contains:
 
-`Greeting.Commands.dll` contains the real business logic of the module and exposes the `Get-Greeting` cmdlet.
-It references 2 dependencies: `SharedDependency.dll` and `LocalDependency.dll`.
+1. [`CustomALC.cs`](./Commands/CustomALC.cs) - A custom implementation of `AssemblyLoadContext` and the code that registers a handler to `AssemblyLoadContext.Default.Resolving` event when the module is loaded (of course, unregister when the module is removed).
+2. [`Command.cs`](./Commands/Command.cs) - The real business logic of the module that exposes the `Get-Greeting` cmdlet.
 
 `LocalDependency.dll` contains the real business logic of the module, which acts like a utility assembly needed by `Greeting.Commands.dll`.
 It also references `SharedDependency.dll`.
@@ -27,8 +26,8 @@ This utility assembly is added to this sample intentionally, to demonstrate the 
 
 ## How it works
 
-The assembly `Greeting.Init.dll` is the first nested module to be loaded.
-During the loading, its `OnImport` implementation will be called, which will register a handler to the `AssemblyLoadContext.Default.Resolving` event.
+During the loading of the nested module `Greeting.Commands.dll`,
+its `OnImport` implementation will be called, which will register a handler to the `AssemblyLoadContext.Default.Resolving` event.
 
 The handler only reacts to the loading request of the `1.0.0.0` version of `SharedDependency.dll`, becuase that's the version this module depends on.
 The handler uses a singleton instance of the custom `AssemblyLoadContext` to serve all loading requests,
