@@ -1,6 +1,10 @@
 ## SampleModule only
 
-> NOTE: this assumes you have built and generated the 3 modules successfully.
+> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1 -UseTechnique CustomALC`.
+>
+> The demo will work mostly the same when you build with `-UseTechnique LoadFile`.
+The only difference is the name of the `AssemblyLoadContext`,
+as `Assembly.LoadFile` uses the assembly file path for the name of the `AssemblyLoadContext` instance it creates.
 
 When `SampleModule` is the only module in the picture,
 its resolving handler will serve the loading request of the `1.0.0.0` version of `SharedDependency.dll`.

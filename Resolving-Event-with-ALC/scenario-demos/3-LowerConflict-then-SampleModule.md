@@ -1,6 +1,10 @@
 ## LowerConflict module loaded before SampleModule
 
-> NOTE: this assumes you have built and generated the 3 modules successfully.
+> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1 -UseTechnique CustomALC`.
+>
+> The demo will work mostly the same when you build with `-UseTechnique LoadFile`.
+The only difference is the name of the `AssemblyLoadContext`,
+as `Assembly.LoadFile` uses the assembly file path for the name of the `AssemblyLoadContext` instance it creates.
 
 When the `LowerConflict` module gets loaded, the `0.7.0.0` version of `SharedDependency.dll` will be loaded into the default `AssemblyLoadContext`.
 Then when loading and using `SampleModule`, the loading request for `1.0.0.0` version of `SharedDependency.dll` will be triggered,

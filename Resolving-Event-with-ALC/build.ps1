@@ -1,4 +1,8 @@
 param(
+    [ValidateSet('CustomALC', 'LoadFile')]
+    [Parameter(Mandatory)]
+    [string] $UseTechnique,
+
     [ValidateSet('Debug', 'Release')]
     [string] $Configuration = 'Debug'
 )
@@ -39,11 +43,12 @@ try {
     Pop-Location
 }
 
-$sampleModule = Join-Path $PSScriptRoot 'src' 'SampleModule'
+$subFolder = $UseTechnique -eq 'CustomALC' ? 'SampleModule-CustomALC' : 'SampleModule-LoadFile'
+$sampleModule = Join-Path $PSScriptRoot 'src' $subFolder
 & "$sampleModule/build.ps1"
 if ($?) {
     $source = Join-Path $sampleModule 'bin' 'SampleModule'
     Copy-Item $source -Recurse $target
 }
 
-Write-Host "All modules are published to '$target'" -ForegroundColor Green
+Write-Host "`nAll modules are published to '$target'" -ForegroundColor Green
