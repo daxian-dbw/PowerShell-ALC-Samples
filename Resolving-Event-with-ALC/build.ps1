@@ -43,7 +43,10 @@ try {
     Pop-Location
 }
 
-$subFolder = $UseTechnique -eq 'CustomALC' ? 'SampleModule-CustomALC' : 'SampleModule-LoadFile'
+$useCustomALC = $UseTechnique -eq 'CustomALC'
+Write-Host "`nProduce the 'SampleModule' that uses '$($useCustomALC ? 'Custom AssemblyLoadContext' : 'Assembly.LoadFile')'`n" -ForegroundColor Green
+
+$subFolder = $useCustomALC ? 'SampleModule-CustomALC' : 'SampleModule-LoadFile'
 $sampleModule = Join-Path $PSScriptRoot 'src' $subFolder
 & "$sampleModule/build.ps1"
 if ($?) {
