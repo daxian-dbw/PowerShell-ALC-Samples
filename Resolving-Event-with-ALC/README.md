@@ -15,13 +15,13 @@ This makes it usually a non-trivial amount of work to apply this techinique --
 - For a new module, this would add additional complexity to the design and implementaion;
 - For an existing module, this would require significant refactoring.
 
-Here I want to introduce another solution to mitigate the problem,
+Here I want to introduce a simplified solution to mitigate the problem,
 which comes with [two limitations](#limitations) comparing to the [above solution][most-robust-solution] but requires way less efforts from the module author.
 
 ## AssemblyLoadContext.Default.Resolving + AssemblyLoadContext
 
 The use of the assembly resolving event is quite common for redirecting loading requests.
-You can register an assembly resolving handler for the specific versions of your dependency assemblies,
+You can register an assembly resolving handler for the exact versions of your dependency assemblies,
 and then leverage `AssemblyLoadContext` in the handler to deal with the loading.
 With this, there is no need to have a warpper assembly,
 and the handler is guaranteed to return the same assembly instance for all the loading requests it receives for the same assembly.
