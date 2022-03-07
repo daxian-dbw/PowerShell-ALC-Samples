@@ -1,5 +1,5 @@
 #
-# Module manifest for module 'IsolatedModule'
+# Module manifest for module 'SampleModule'
 #
 
 @{
