@@ -1,5 +1,5 @@
 #
-# Module manifest for module 'SampleModule'
+# Module manifest for module 'conflict'
 #
 
 @{
