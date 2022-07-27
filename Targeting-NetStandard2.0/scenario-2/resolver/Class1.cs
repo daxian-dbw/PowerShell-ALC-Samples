@@ -26,7 +26,7 @@ namespace assembly.resolver
             string name = args.Name;
             if (name.Equals("Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed", StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine($"<*** Fall in 'ResolvingHandler': SharedDependency, Version=1.0.0.0  -- Loaded! ***>");
+                Console.WriteLine($"<*** Fall in 'ResolvingHandler': Newtonsoft.Json, Version=13.0.0.0  -- Loaded! ***>");
 
                 string path = Path.Combine(dependencyFolder, name.Split(',')[0]) + ".dll";
                 if (File.Exists(path))

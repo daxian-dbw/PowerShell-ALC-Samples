@@ -26,7 +26,7 @@ if ($LASTEXITCODE -eq 0) {
 
     $null = New-Item -ItemType Directory $target
     Move-Item "$PSScriptRoot\bin\conflict\Newtonsoft.Json.dll" $target
-    Move-Item "$PSScriptRoot\bin\resolver\resolver.dll" $moduleDir
+    Move-Item "$PSScriptRoot\bin\resolver\resolver.dll" $moduleDir -Force
     Remove-Item "$PSScriptRoot\bin\resolver" -Recurse
 
     $moduleDir = Resolve-Path $moduleDir -Relative
