@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>conflict</AssemblyName>
+    <LangVersion>10.0</LangVersion>
 
     <!-- Disable PDB generation -->
     <DebugSymbols>false</DebugSymbols>
@@ -13,6 +14,7 @@
 
     <!-- Deploy the produced assembly -->
     <PublishDir>..\bin\conflict</PublishDir>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
   </PropertyGroup>
 
   <ItemGroup>
