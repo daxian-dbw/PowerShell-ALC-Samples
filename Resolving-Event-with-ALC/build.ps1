@@ -1,8 +1,4 @@
 param(
-    [ValidateSet('CustomALC', 'LoadFile')]
-    [Parameter(Mandatory)]
-    [string] $UseTechnique,
-
     [ValidateSet('Debug', 'Release')]
     [string] $Configuration = 'Debug'
 )
@@ -43,11 +39,7 @@ try {
     Pop-Location
 }
 
-$useCustomALC = $UseTechnique -eq 'CustomALC'
-Write-Host "`nProduce the 'SampleModule' that uses '$($useCustomALC ? 'Custom AssemblyLoadContext' : 'Assembly.LoadFile')'`n" -ForegroundColor Green
-
-$subFolder = $useCustomALC ? 'SampleModule-CustomALC' : 'SampleModule-LoadFile'
-$sampleModule = Join-Path $PSScriptRoot 'src' $subFolder
+$sampleModule = Join-Path $PSScriptRoot 'src' 'SampleModule'
 & "$sampleModule/build.ps1"
 if ($?) {
     $source = Join-Path $sampleModule 'bin' 'SampleModule'

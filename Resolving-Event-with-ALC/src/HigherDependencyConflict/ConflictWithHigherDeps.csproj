@@ -12,6 +12,7 @@
 
     <!-- Deploy the produced assembly -->
     <PublishDir>bin\HigherConflict</PublishDir>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
   </PropertyGroup>
 
   <ItemGroup>

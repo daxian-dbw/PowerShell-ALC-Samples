@@ -6,6 +6,7 @@
     <!-- Disable PDB generation -->
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
   </PropertyGroup>
 
   <ItemGroup>

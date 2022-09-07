@@ -3,7 +3,7 @@ param(
     [string] $Configuration = "Debug"
 )
 
-dotnet publish "$PSScriptRoot\SampleModule-CustomALC.sln"
+dotnet publish "$PSScriptRoot\SampleModule.sln"
 
 if ($LASTEXITCODE -eq 0) {
     $target = Join-Path $PSScriptRoot 'bin' 'SampleModule' 'Dependencies'

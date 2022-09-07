@@ -26,42 +26,32 @@ and then leverage `AssemblyLoadContext` in the handler to deal with the loading.
 With this, there is no need to have a warpper assembly,
 and the handler is guaranteed to return the same assembly instance for all the loading requests it receives for the same assembly.
 
-> NOTE: Do not use `Assembly.LoadFrom` in the event handler,
-because that API always loads an assembly file to the default `AssemblyLoadContext`,
+> **NOTE:** Do not use `Assembly.LoadFrom` in the event handler.</br>
+That API always loads an assembly file to the default `AssemblyLoadContext`,
 which is actually the source of this assembly-conflict problem.
 
-There are two ways to leverage `AssemblyLoadContext` in the handler:
-- Create a custom `AssemblyLoadContext` class and directly use it to load assembly files
-- Use the `Assembly.LoadFile` API, which internally uses an anonymous `AssemblyLoadContext` to load an assembly file
+> **NOTE:** Do not use `Assembly.LoadFile` for the dependency isolation purpose.</br>
+> This API does load an assembly to a separate `AssemblyLoadContext` instance, but assemblies loaded by
+> this API are discoverable by PowerShell's type resolution code (see code [here](https://github.com/PowerShell/PowerShell/blob/918bb8c952af1d461abfc98bc709a1d359168a1c/src/System.Management.Automation/utils/ClrFacade.cs#L56-L61)).
+> So, your module could run into the "_Type Identity_" issue when loading an assembly by `Assembly.LoadFile` while another module
+> loads a different version of the same assembly into the default `AssemblyLoadContext`.
 
-`Assembly.LoadFile` is simpler to use,
-but it loads different assembly files into different `AssemblyLoadContext` instances.
-It's more recommended to create a custom `AssemblyLoadContext` class and use that for loading all dependencies,
-especially when dependency assemblies may pull in other dependencies.
+To leverage `AssemblyLoadContext`,
+you need to create a custom `AssemblyLoadContext` class and directly use it to load assembly files.
 
 We have the module `SampleModule` to demonstrate this solution.
 The whole sample is organized as follows:
 
 - [shared-dependency](./src/shared-dependency/): it's a project to produce different versions of NuGet packages for `SharedDependency.dll`.
   Three such packages of the versions `0.7.0`, `1.0.0`, and `1.5.0` are available under the folder [nuget-packages](./nuget-packages/).
-- `SampleModule`
-  - [SampleModule-CustomALC](./src/SampleModule-CustomALC/): it produces the `SampleModule` that uses _"`Resolving` event + custom `AssemblyLoadContext`"_ to handle the conflicting `SharedDependency.dll`.
-    See its [README](./src/SampleModule-CustomALC/README.md) for details on the module structure and how it works.
-  - [SampleModule-LoadFile](./src/SampleModule-LoadFile/): it produces the `SampleModule` that uses _"`Resolving` event + `Assembly.LoadFile`"_ to handle the conflicting `SharedDependency.dll`.
-    See its [README](./src/SampleModule-LoadFile/README.md) for details on the module structure and how it works.
+- [SampleModule](./src/SampleModule/): it produces the `SampleModule` that uses _"`Resolving` event + custom `AssemblyLoadContext`"_ to handle the conflicting `SharedDependency.dll`.
+  See its [README](./src/SampleModule/README.md) for details on the module structure and how it works.
 - [ConflictWithHigherDeps](./src/HigherDependencyConflict/): it's a module that depends on a higher version of `SharedDependency.dll`
 - [ConflictWithLowerDeps](./src/LowerDependencyConflict/): it's a module that depends on a lower version of `SharedDependency.dll`
 - [scenario-demos](./scenario-demos/): it contains the demos for five scenarios that `SampleModule` can run into with the modules `ConflictWithHigherDeps` and `ConflictWithLowerDeps`.
 
 To build and generate all the 3 modules needed for the demos,
-run the following command within this folder:
-```
-## Specify 'CustomALC' to produces the 'SampleModule' module that uses a custom AssemblyLoadContext.
-.\build.ps1 -UseTechnique CustomALC
-
-## Or, specify 'LoadFile' to produces the 'SampleModule' module that uses 'Assembly.LoadFile'.
-.\build.ps1 -UseTechnique LoadFile
-```
+run the `.\build.ps1` within this folder.
 
 The generated modules will be placed in `.\bin`.
 Please make sure `.NET SDK 6` is installed and available in `PATH` before building.
