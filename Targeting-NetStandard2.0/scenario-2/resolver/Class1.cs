@@ -5,7 +5,7 @@ using System.Management.Automation;
 using System.Reflection;
 
 namespace assembly.resolver
-{ 
+{
     public class Init : IModuleAssemblyInitializer, IModuleAssemblyCleanup
     {
         private static readonly string s_dependencyFolder;
