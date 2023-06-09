@@ -2,7 +2,7 @@
 
 This repository includes sample code to show the techniques that can be used
 to isolate dependency assemblies for a PowerShell module,
-so as to avoid facing conflicts in the assembly resolution.
+so as to avoid facing conflicts in the assembly resolution when loading the module.
 
 Currently, two overall scenarios are discussed:
 
