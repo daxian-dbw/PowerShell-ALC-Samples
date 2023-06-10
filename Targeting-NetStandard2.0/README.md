@@ -8,7 +8,7 @@ and it happens a lot that a module starts to have assembly conflicts with PowerS
 The type `AssemblyLoadContext` is not available when targeting `netstandard2.0` or `net462`,
 but it's easy to wrap a few reflection API calls to create a custom `AssemblyLoadContext` and load an assembly into it from path
 when the module runs in the .NET (PowerShell 7+) environment.
-so, we will create the `AssemblyLoadContextProxy` type that encapsulate those reflection operations,
+So, we will create the `AssemblyLoadContextProxy` type that encapsulate those reflection operations,
 and we will show how to use `AppDomain.AssemblyResolve` and `AssemblyLoadContextProxy` to work around this assembly conflict issue.
 
 > **NOTE:** Do not use `Assembly.LoadFile` for the dependency isolation purpose.</br>
@@ -20,6 +20,7 @@ and we will show how to use `AppDomain.AssemblyResolve` and `AssemblyLoadContext
 ### Two scenarios
 
 Samples here are for 2 scenarios:
+
 1. The dependency of `Newtonsoft.Json` is delay-loaded only when the module business code gets to run.
 2. The dependency of `Newtonsoft.Json` is at the class-level, and will be loaded as soon as the assembly gets loaded.
 

@@ -2,7 +2,7 @@
 
 In this scenario, `Newtonsoft.Json` types are directly used in the class level, such as attribute and base type.
 This will trigger the loading of the version `13.0.0.0` of `Newtonsoft.Json` as soon as the `conflict.dll` assembly gets loaded.
-In that case, registrering `AssemblyResolve` within the same assembly will be too late and thus won't work.
+In that case, registering `AssemblyResolve` within the same assembly will be too late and thus won't work.
 
 In this case, the registration of `AssemblyResolve` needs to happen in a separate assembly (`resolver.dll` in this sample),
 which needs to be loaded before the above assembly, so the handler can kick in when the `conflict.dll` assembly gets loaded.

@@ -1,7 +1,8 @@
 ## Module structure
 
 The `SampleModule` has the following folder structure:
-```
+
+```sh
 └───SampleModule
     │   Greeting.Commands.dll
     │   LocalDependency.dll
@@ -29,14 +30,15 @@ This utility assembly is added to this sample intentionally, to demonstrate the 
 During the loading of the nested module `Greeting.Commands.dll`,
 its `OnImport` implementation will be called, which will register a handler to the `AssemblyLoadContext.Default.Resolving` event.
 
-The handler only reacts to the loading request of the `1.0.0.0` version of `SharedDependency.dll`, becuase that's the version this module depends on.
+The handler only reacts to the loading request of the `1.0.0.0` version of `SharedDependency.dll`, because that's the version this module depends on.
 The handler uses a singleton instance of the custom `AssemblyLoadContext` to serve all loading requests,
-so the it's guaranteed to return the same assembly instance for all loading requests it serves.
+so that it's guaranteed to return the same assembly instance for all loading requests it serves.
 The custom `AssemblyLoadContext` looks for the requested assembly from the `Dependencies` folder under the module base,
 and that's why `SharedDependency.dll` is placed there.
 
 The syntax of `Get-Greeting` is
-```
+
+```powershell
 Get-Greeting -UseSharedDependency [<CommonParameters>]
 
 Get-Greeting -UseLocalDependency [<CommonParameters>]
