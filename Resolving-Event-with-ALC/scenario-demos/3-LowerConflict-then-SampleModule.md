@@ -1,6 +1,7 @@
 ## LowerConflict module loaded before SampleModule
 
-> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1`.
+> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1`
+and have `Set-Location PowerShell-ALC-Samples\Resolving-Event-with-ALC`.
 
 When the `LowerConflict` module gets loaded, the `0.7.0.0` version of `SharedDependency.dll` will be loaded into the default `AssemblyLoadContext`.
 Then when loading and using `SampleModule`, the loading request for `1.0.0.0` version of `SharedDependency.dll` will be triggered,
@@ -11,9 +12,9 @@ So, the registered resolving handler will be triggered, to serve the loading req
 ```powershell
 ## PowerShell 7.2
 
-PS:1> import-module C:\arena\source\PowerShell-ALC-Samples\Resolving-Event-with-ALC\bin\lowerConflict\ConflictWithLowerDeps.dll
+PS:1> Import-Module .\bin\lowerConflict\ConflictWithLowerDeps.dll
 
-PS:2> gmo ConflictWithLowerDeps
+PS:2> Get-Module ConflictWithLowerDeps
 
 ModuleType Version    PreRelease Name                                ExportedCommands
 ---------- -------    ---------- ----                                ----------------
@@ -22,7 +23,7 @@ Binary     1.0.0.0               ConflictWithLowerDeps               Test-Confli
 PS:3> Test-ConflictWithLowerDeps   ## the '0.7.0.0' version of 'SharedDependency' gets loaded in default ALC.
 Greetings! -- from 'SharedDependency, Version=0.7.0.0, Culture=neutral, PublicKeyToken=null', loaded in 'Default'
 
-PS:4> Import-Module C:\arena\source\PowerShell-ALC-Samples\Resolving-Event-with-ALC\bin\SampleModule\SampleModule.psd1
+PS:4> Import-Module .\bin\SampleModule\SampleModule.psd1
 
 PS:5> Get-Greeting -UseSharedDependency   ## triggers loading request of 'SharedDependency' from 'Greeting.Commands.dll'.
 <*** Fall in 'ResolvingHandler': SharedDependency, Version=1.0.0.0  -- Loaded! ***>

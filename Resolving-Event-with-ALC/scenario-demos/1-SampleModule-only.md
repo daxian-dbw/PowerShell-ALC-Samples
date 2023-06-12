@@ -1,6 +1,7 @@
 ## SampleModule only
 
-> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1`.
+> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1`
+and have `Set-Location PowerShell-ALC-Samples\Resolving-Event-with-ALC`.
 
 When `SampleModule` is the only module in the picture,
 its resolving handler will serve the loading request of the `1.0.0.0` version of `SharedDependency.dll`.
@@ -8,7 +9,7 @@ its resolving handler will serve the loading request of the `1.0.0.0` version of
 ```powershell
 ## PowerShell 7.2
 
-PS:1> import-Module C:\arena\source\PowerShell-ALC-Samples\Resolving-Event-with-ALC\bin\SampleModule\SampleModule.psd1
+PS:1> Import-Module .\bin\SampleModule\SampleModule.psd1
 
 PS:2> Get-Greeting -UseSharedDependency  ## triggers loading request of 'SharedDependency' from 'Greeting.Commands.dll'.
 <*** Fall in 'ResolvingHandler': SharedDependency, Version=1.0.0.0  -- Loaded! ***>

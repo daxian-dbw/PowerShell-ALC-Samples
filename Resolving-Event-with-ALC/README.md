@@ -4,31 +4,32 @@ The article [Resolving PowerShell module assembly dependency conflicts][the-arti
 The [most robust solution][most-robust-solution] described in the article leverages the `AssemblyLoadContext` to handle the loading requests of all a module's dependencies,
 which makes sure the module gets the exact version of the dependency assemblies that it requests for.
 
-This techinique presents a clean solution for a module to avoid dependency conflicts.
+This technique presents a clean solution for a module to avoid dependency conflicts.
 It is used by the [Bicep PowerShell module](https://github.com/PSBicep/PSBicep),
-and is also documented with a great example in this blog post: [Resolving PowerShell Module Conflicts](https://pipe.how/get-assemblyloadcontext/).
+and is also documented with a great example in Emanuel Palm's blog post: [Resolving PowerShell Module Conflicts](https://pipe.how/get-assemblyloadcontext/).
 
-However, this techinique requires the module assembly to not directly reference the dependency assemblies,
+However, this technique requires the module assembly to not directly reference the dependency assemblies,
 but instead, to reference a wrapper assembly which then references the dependency assemblies.
 The wrapper assembly acts like a bridge, forwarding the calls from the module assembly to the dependency assemblies.
-This makes it usually a non-trivial amount of work to apply this techinique --
-- For a new module, this would add additional complexity to the design and implementaion;
+This makes it usually a non-trivial amount of work to apply this technique --
+
+- For a new module, this would add additional complexity to the design and implementation;
 - For an existing module, this would require significant refactoring.
 
 Here I want to introduce a simplified solution to mitigate the problem,
-which comes with [two limitations](#limitations) comparing to the [above solution][most-robust-solution] but requires way less efforts from the module author.
+which comes with [two limitations](#limitations) comparing to the [above solution][most-robust-solution] but requires way less effort from the module author.
 
 ## AssemblyLoadContext.Default.Resolving + AssemblyLoadContext
 
 The use of the assembly resolving event is quite common for redirecting loading requests.
 You can register an assembly resolving handler for the exact versions of your dependency assemblies,
 and then leverage `AssemblyLoadContext` in the handler to deal with the loading.
-With this, there is no need to have a warpper assembly,
+With this, there is no need to have a wrapper assembly,
 and the handler is guaranteed to return the same assembly instance for all the loading requests it receives for the same assembly.
 
 > **NOTE:** Do not use `Assembly.LoadFrom` in the event handler.</br>
-That API always loads an assembly file to the default `AssemblyLoadContext`,
-which is actually the source of this assembly-conflict problem.
+> That API always loads an assembly file to the default `AssemblyLoadContext`,
+> which is actually the source of this assembly-conflict problem.
 
 > **NOTE:** Do not use `Assembly.LoadFile` for the dependency isolation purpose.</br>
 > This API does load an assembly to a separate `AssemblyLoadContext` instance, but assemblies loaded by
@@ -63,6 +64,7 @@ go ahead to [scenario-demos](./scenario-demos/) to review the behaviors of `Samp
 ## Limitations
 
 Comparing to technique adopted by the Bicep module, there are 2 limitations with this solution:
+
 1. If a higher version of the dependency is already loaded in the default `AssemblyLoadContext`,
    that version will be used by your module, and the resolving handler will never be triggered.
 1. If another module uses the same technique to handle the same version of the same dependency,
@@ -71,10 +73,10 @@ Comparing to technique adopted by the Bicep module, there are 2 limitations with
    This is because if your module happens to have a new request for the same dependency after that point, the new request might then be served by your module's resolving handler with a new assembly instance, which could cause the type identity issue.
 
 Please make sure you evaluate the limitations before going forward with this solution:
+
 - For the 1st limitation, it may be acceptable to depend on a higher version dependency assembly at run time for some modules.
   For those modules, this solution could be a good fit.
 - For the 2nd limitation, it would be rare to happen in practice, given that most workflows don't involve removing a loaded module.
-
 
 [the-article]: https://docs.microsoft.com/powershell/scripting/dev-cross-plat/resolving-dependency-conflicts
 [most-robust-solution]: https://docs.microsoft.com/powershell/scripting/dev-cross-plat/resolving-dependency-conflicts#loading-through-net-core-assembly-load-contexts
