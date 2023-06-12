@@ -1,6 +1,7 @@
 ## HigherConflict module loaded before SampleModule
 
-> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1` and have `Set-Location PowerShell-ALC-Samples\Resolving-Event-with-ALC\bin`.
+> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1`
+and have `Set-Location PowerShell-ALC-Samples\Resolving-Event-with-ALC`.
 
 When the `HigherConflict` module gets loaded, the `1.5.0.0` version of `SharedDependency.dll` will be loaded into the default `AssemblyLoadContext`.
 Then when loading and using `SampleModule`, the loading request for `1.0.0.0` version of `SharedDependency.dll` will be triggered,
@@ -9,7 +10,7 @@ which will be served directly by the default `AssemblyLoadContext` with the `1.5
 ```powershell
 ## PowerShell 7.2
 
-PS:1> Import-Module .\HigherConflict\ConflictWithHigherDeps.dll
+PS:1> Import-Module .\bin\HigherConflict\ConflictWithHigherDeps.dll
 PS:2> Get-Module ConflictWithHigherDeps
 
 ModuleType Version    PreRelease Name                                ExportedCommands

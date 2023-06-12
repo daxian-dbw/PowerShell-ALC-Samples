@@ -30,6 +30,7 @@ and the handler is guaranteed to return the same assembly instance for all the l
 > **NOTE:** Do not use `Assembly.LoadFrom` in the event handler.</br>
 > That API always loads an assembly file to the default `AssemblyLoadContext`,
 > which is actually the source of this assembly-conflict problem.
+
 > **NOTE:** Do not use `Assembly.LoadFile` for the dependency isolation purpose.</br>
 > This API does load an assembly to a separate `AssemblyLoadContext` instance, but assemblies loaded by
 > this API are discoverable by PowerShell's type resolution code (see code [here](https://github.com/PowerShell/PowerShell/blob/918bb8c952af1d461abfc98bc709a1d359168a1c/src/System.Management.Automation/utils/ClrFacade.cs#L56-L61)).

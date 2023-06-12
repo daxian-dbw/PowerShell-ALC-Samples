@@ -1,6 +1,7 @@
 ## LowerConflict module loaded after SampleModule
 
-> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1` and have `Set-Location PowerShell-ALC-Samples\Resolving-Event-with-ALC\bin`.
+> NOTE: This assumes you have built and generated the 3 modules successfully with `.\build.ps1`
+and have `Set-Location PowerShell-ALC-Samples\Resolving-Event-with-ALC`.
 
 When the `SampleModule` gets loaded and used first,
 the loading request for the `1.0.0.0` version of `SharedDependency.dll` will be served by its resolving handler.
